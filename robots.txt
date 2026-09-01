@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://casadoa018-dotcom.github.io/plan-rescate/sitemap.xml
