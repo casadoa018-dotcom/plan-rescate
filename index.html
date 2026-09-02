@@ -258,6 +258,34 @@
     .commercial-step strong { display: block; margin: 1px 0 3px; font-size: .72rem; }
     .commercial-step span { display: block; color: var(--muted); font-size: .61rem; line-height: 1.38; }
 
+    .demo-launcher {
+      margin: 0 0 15px;
+      padding: 17px;
+      border: 1px solid #dcd8ff;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(239,239,255,.96), rgba(255,255,255,.96));
+      box-shadow: var(--shadow-soft);
+    }
+    .demo-launcher-head { display: flex; align-items: end; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
+    .demo-launcher h2 { margin: 0 0 3px; font-size: 1rem; }
+    .demo-launcher p { margin: 0; color: var(--muted); font-size: .7rem; line-height: 1.45; }
+    .demo-launcher a { color: #4c46b8; font-size: .68rem; font-weight: 850; white-space: nowrap; text-underline-offset: 3px; }
+    .demo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .demo-card {
+      min-height: 76px;
+      padding: 11px;
+      border: 1px solid #d9d6fb;
+      border-radius: 14px;
+      background: white;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+      transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    .demo-card:hover { transform: translateY(-1px); border-color: var(--violet); box-shadow: 0 7px 18px rgba(76,70,184,.09); }
+    .demo-card strong { display: block; margin-bottom: 4px; color: #4943ae; font-size: .72rem; }
+    .demo-card span { display: block; color: var(--muted); font-size: .61rem; line-height: 1.35; }
+
     .panel {
       padding: 19px;
       border: 1px solid var(--line);
@@ -959,6 +987,9 @@
       .tutor-context-row { grid-template-columns: 1fr 1fr; }
       .tutor-context-row .context-toggle { grid-column: auto; }
       .commercial-steps { grid-template-columns: 1fr; }
+      .demo-launcher-head { align-items: flex-start; flex-direction: column; }
+      .demo-grid { grid-template-columns: 1fr; }
+      .demo-card { min-height: 64px; }
       .usage-grid { grid-template-columns: 1fr 1fr; }
       .pricing-grid { grid-template-columns: 1fr; }
       .launch-actions { grid-template-columns: 1fr; }
@@ -1022,6 +1053,7 @@
           <span>Sin tarjeta</span>
           <span>Sin anuncios</span>
           <span>Sin cuenta</span>
+          <span>86 comprobaciones superadas</span>
         </div>
       </div>
 
@@ -1030,6 +1062,21 @@
         <article class="commercial-step"><span class="commercial-step-number">2</span><div><strong>Entiende de verdad</strong><span>Recibe una respuesta directa y una comprobación.</span></div></article>
         <article class="commercial-step"><span class="commercial-step-number">3</span><div><strong>Llega preparado</strong><span>Sigue un plan realista que absorbe los días perdidos.</span></div></article>
       </div>
+
+      <section class="demo-launcher" aria-labelledby="demoLauncherTitle">
+        <div class="demo-launcher-head">
+          <div>
+            <h2 id="demoLauncherTitle">Pruébalo con un ejemplo</h2>
+            <p>Abre el tutor con una pregunta preparada. Podrás cambiarla antes de enviarla.</p>
+          </div>
+          <a href="./guias.html">Ver guías gratuitas</a>
+        </div>
+        <div class="demo-grid">
+          <button class="demo-card" type="button" data-launch-demo="ecuacion"><strong>Matemáticas</strong><span>Resolver 2x + 6 = 14 y comprobarlo</span></button>
+          <button class="demo-card" type="button" data-launch-demo="historia"><strong>Historia</strong><span>Entender las causas de la Revolución francesa</span></button>
+          <button class="demo-card" type="button" data-launch-demo="plan"><strong>Organización</strong><span>Preparar un examen que llega en siete días</span></button>
+        </div>
+      </section>
 
       <form id="planForm" class="panel" novalidate aria-label="Crear un plan de estudio">
         <div class="wizard-head">
@@ -1646,6 +1693,7 @@
     </section>
 
     <footer class="site-footer" aria-label="Información legal y soporte">
+      <a href="./guias.html">Guías de estudio</a>
       <a href="./privacidad.html" target="_blank" rel="noopener">Privacidad</a>
       <a href="./condiciones.html" target="_blank" rel="noopener">Condiciones de uso</a>
       <a href="https://github.com/casadoa018-dotcom/plan-rescate/issues" target="_blank" rel="noopener">Informar de un problema</a>
@@ -1676,6 +1724,23 @@
           label: "Qwen3 1,7B",
           webgpuMB: 1430,
           wasmMB: 2150
+        }
+      };
+      const DEMO_PROMPTS = {
+        ecuacion: {
+          subject: "math",
+          mode: "solve",
+          question: "Resuelve 2x + 6 = 14 paso a paso y comprueba el resultado."
+        },
+        historia: {
+          subject: "history",
+          mode: "direct",
+          question: "¿Cuáles fueron las causas principales de la Revolución francesa?"
+        },
+        plan: {
+          subject: "general",
+          mode: "plan",
+          question: "Tengo un examen dentro de 7 días. Ayúdame a dividir el estudio en sesiones pequeñas y realistas."
         }
       };
       const TESSERACT_MODULE = "https://cdn.jsdelivr.net/npm/tesseract.js@7.0.0/dist/tesseract.esm.min.js";
@@ -2657,6 +2722,23 @@
         showToast("Tutor preparado. Escribe una pregunta o añade una foto.");
       }
 
+      function launchTutorDemo(key) {
+        const demo = DEMO_PROMPTS[key];
+        if (!demo) return;
+        quickTutorStart();
+        ensureAssistant();
+        state.assistant.subject = demo.subject;
+        state.assistant.mode = demo.mode;
+        saveState();
+        renderTutor();
+        const question = $("tutorQuestion");
+        question.value = demo.question;
+        $("tutorCharacterCount").textContent = String(demo.question.length);
+        updateDetectedSubject(demo.question);
+        question.focus();
+        showToast("Ejemplo preparado. Revísalo y toca Preguntar al tutor.");
+      }
+
       function statsSnapshot() {
         const sessions = state?.sessions || [];
         const done = sessions.filter(session => session.status === "done");
@@ -2875,9 +2957,10 @@
         renderMore();
         const title = "Plan Rescate · Tutor IA para Secundaria";
         const textValue = "Prueba Plan Rescate: entiende ejercicios y organiza un plan de estudio adaptable desde el móvil.";
+        const shareURL = document.querySelector('link[rel="canonical"]')?.href || location.href;
         try {
           if (/^https?:$/.test(location.protocol) && navigator.share) {
-            await navigator.share({ title, text: textValue, url: location.href });
+            await navigator.share({ title, text: textValue, url: shareURL });
             showToast("Beta compartida.");
             return;
           }
@@ -2890,7 +2973,7 @@
             }
           }
           if (/^https?:$/.test(location.protocol)) {
-            const copied = await copyText(location.href);
+            const copied = await copyText(shareURL);
             showToast(copied ? "Enlace copiado." : "No se pudo copiar el enlace.");
           } else {
             showToast("Comparte el archivo original desde la aplicación Archivos de tu móvil.");
@@ -5226,6 +5309,7 @@
       });
       $("planForm").addEventListener("submit", createPlan);
       $("quickTutorStart").addEventListener("click", quickTutorStart);
+      $$('[data-launch-demo]').forEach(button => button.addEventListener("click", () => launchTutorDemo(button.dataset.launchDemo)));
       $("startPlanSetup").addEventListener("click", () => {
         $("planForm").scrollIntoView({ behavior: "smooth", block: "start" });
         setTimeout(() => $("goalName").focus(), 350);
@@ -5381,6 +5465,12 @@
         showPlan();
       } else {
         showSetup(false);
+      }
+      const requestedDemo = typeof URLSearchParams !== "undefined"
+        ? new URLSearchParams(String(location.search || "")).get("demo")
+        : null;
+      if (requestedDemo && DEMO_PROMPTS[requestedDemo]) {
+        requestAnimationFrame(() => launchTutorDemo(requestedDemo));
       }
     })();
   </script>

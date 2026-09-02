@@ -10,6 +10,14 @@ La beta funciona directamente en el navegador, sin crear una cuenta, sin tarjeta
 
 **Sin pagos ni cuentas:** todas las funciones publicadas son gratuitas durante esta beta.
 
+## Guías gratuitas
+
+- [Cómo resolver ejercicios paso a paso](https://casadoa018-dotcom.github.io/plan-rescate/resolver-ejercicios-paso-a-paso.html)
+- [Cómo crear un plan de estudio realista](https://casadoa018-dotcom.github.io/plan-rescate/crear-plan-de-estudio.html)
+- [Cómo estudiar apuntes con recuerdo activo](https://casadoa018-dotcom.github.io/plan-rescate/estudiar-apuntes.html)
+
+Las guías contienen métodos completos y ejemplos verificables. Sus botones abren el tutor con una consulta preparada que el estudiante puede modificar antes de enviarla.
+
 ## Qué permite hacer
 
 - Consultar dudas frecuentes de todas las asignaturas con un tutor esencial que funciona sin activación.
@@ -58,6 +66,8 @@ Archivos de publicación:
 - `icon.svg`: icono del producto.
 - `social-preview.png`: vista previa al compartir el enlace.
 - `privacidad.html` y `condiciones.html`: información legal de la beta.
+- `guias.html` y las tres guías temáticas: contenido educativo indexable y entradas de demostración.
+- `guia.css`: presentación compartida de las guías.
 - `robots.txt` y `sitemap.xml`: rastreo e indexación.
 
 ## Beta

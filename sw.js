@@ -1,7 +1,7 @@
 "use strict";
 
 const CACHE_PREFIX = "plan-rescate-shell-";
-const CACHE_NAME = `${CACHE_PREFIX}v2`;
+const CACHE_NAME = `${CACHE_PREFIX}v3`;
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -10,6 +10,11 @@ const APP_SHELL = [
   "./icon-192.png",
   "./icon-512.png",
   "./social-preview.png",
+  "./guia.css",
+  "./guias.html",
+  "./resolver-ejercicios-paso-a-paso.html",
+  "./crear-plan-de-estudio.html",
+  "./estudiar-apuntes.html",
   "./privacidad.html",
   "./condiciones.html"
 ];
