@@ -8,6 +8,8 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
   "background_color": "#f5f7fb",
   "theme_color": "#111827",
   "categories": ["education", "productivity"],
@@ -29,6 +31,15 @@
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./social-preview.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Plan Rescate, tutor y planificador de estudio"
     }
   ]
 }

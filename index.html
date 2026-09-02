@@ -12,6 +12,7 @@
   <meta name="description" content="Tutor de IA gratuito durante la beta para Secundaria: resuelve ejercicios paso a paso, estudia apuntes y crea un plan adaptable desde el móvil." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="plan-rescate-ai-endpoint" content="" />
   <link rel="canonical" href="https://casadoa018-dotcom.github.io/plan-rescate/" />
   <link rel="alternate" hreflang="es" href="https://casadoa018-dotcom.github.io/plan-rescate/" />
   <link rel="icon" href="./icon.svg" type="image/svg+xml" />
@@ -109,6 +110,32 @@
     button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgba(99,91,255,.24); outline-offset: 2px; }
     textarea { resize: vertical; }
     [hidden] { display: none !important; }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+    .skip-link {
+      position: fixed;
+      left: 12px;
+      top: 12px;
+      z-index: 100;
+      padding: 10px 13px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: white;
+      font-weight: 850;
+      transform: translateY(-180%);
+      transition: transform .16s ease;
+    }
+    .skip-link:focus { transform: translateY(0); }
 
     .shell {
       width: min(100%, 860px);
@@ -892,6 +919,21 @@
     }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+    .site-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 16px;
+      margin: 22px 0 2px;
+      color: var(--muted);
+      font-size: .68rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .site-footer a { color: #4c46b8; font-weight: 800; text-underline-offset: 3px; }
+    .site-footer span { flex-basis: 100%; }
+
     @media (max-width: 620px) {
       .shell { padding-bottom: max(104px, calc(88px + env(safe-area-inset-bottom))); }
       .grid.two, .grid.three { grid-template-columns: 1fr; }
@@ -925,6 +967,8 @@
       .chat-shell { margin: 18px -17px -17px; padding: 17px; }
       .chat-message { max-width: 97%; }
       .local-ai-actions { grid-template-columns: 1fr; }
+      .filter-btn, .prompt-chip, .followup-btn, .text-btn, .message-action, .material-review-footer button, .material-quick-actions button { min-height: 44px; }
+      .site-footer { margin-bottom: 14px; font-size: .72rem; }
     }
 
     @media (max-width: 390px) {
@@ -947,7 +991,8 @@
   </style>
 </head>
 <body>
-  <main class="shell">
+  <a class="skip-link" href="#mainContent">Saltar al contenido</a>
+  <main id="mainContent" class="shell">
     <header class="topbar">
       <div class="brand">
         <div class="brand-mark" aria-hidden="true">R</div>
@@ -959,14 +1004,14 @@
     <section id="setupView">
       <div class="hero">
         <span class="beta-label">Beta fundadores · acceso Pro incluido</span>
-        <span class="eyebrow">Tutor privado para todas tus asignaturas</span>
+        <span class="eyebrow">Tutor y planificador para todas tus asignaturas</span>
         <h1>De una duda a un plan para aprobar.</h1>
-        <p>Haz una foto de un ejercicio, entiende cada paso y convierte tus temas pendientes en un plan diario que se reajusta si pierdes un día.</p>
+        <p>Haz una foto de un ejercicio, recibe ayuda inmediata con herramientas educativas y convierte tus temas pendientes en un plan diario que se reajusta si pierdes un día.</p>
         <div class="feature-chips">
           <span class="feature-chip">Todas las asignaturas</span>
           <span class="feature-chip">Fotos, PDF y apuntes</span>
           <span class="feature-chip">Explicaciones a tu nivel</span>
-          <span class="feature-chip">IA privada en tu móvil</span>
+          <span class="feature-chip">IA privada opcional en tu móvil</span>
         </div>
         <div class="hero-actions">
           <button id="quickTutorStart" class="btn btn-lime" type="button">✦ Probar el tutor gratis</button>
@@ -1219,6 +1264,7 @@
             <h3>Nota rápida</h3>
             <p>Apunta dudas, recordatorios o lo primero que harás al volver.</p>
           </div>
+          <label class="sr-only" for="quickNote">Nota rápida</label>
           <textarea id="quickNote" class="quick-note" maxlength="800" placeholder="Ej. Preguntar mañana cómo resolver el ejercicio 4..."></textarea>
         </section>
       </section>
@@ -1250,6 +1296,7 @@
           <details class="inline-form">
             <summary>Añadir otro tema al plan</summary>
             <div class="inline-fields">
+              <label class="sr-only" for="newTopicName">Nombre del nuevo tema</label>
               <input id="newTopicName" maxlength="60" placeholder="Nombre del nuevo tema" />
               <select id="newTopicConfidence" aria-label="Dominio del nuevo tema">
                 <option value="1">Necesito empezar</option>
@@ -1272,7 +1319,7 @@
             <div>
               <span class="tutor-kicker">Plan Rescate AI</span>
               <h2>Tu tutor personal de estudio</h2>
-              <p>Resuelve, comprende y practica cualquier asignatura. Mantiene el contexto de la conversación y adapta la profundidad de cada respuesta.</p>
+              <p>Resuelve cálculos, explica conceptos frecuentes y trabaja con tus apuntes al instante. La IA avanzada local es opcional para preguntas abiertas y conversación extensa.</p>
             </div>
             <span class="tutor-version-badge">Tutor 5.1 · Beta Pro</span>
           </div>
@@ -1285,8 +1332,8 @@
           <aside id="localAICard" class="ai-bridge">
             <div class="ai-bridge-head">
               <div>
-                <h3>Motor de IA privado</h3>
-                <p id="localAIText">Actívalo una vez para recibir respuestas dentro de la aplicación, sin cuentas ni claves.</p>
+                <h3>IA avanzada local <span class="optional">(opcional)</span></h3>
+                <p id="localAIText">El tutor esencial funciona sin descargar un modelo. Activa esta opción solo si quieres respuestas generativas más amplias dentro de la aplicación.</p>
               </div>
               <span class="mini-badge">Qwen3</span>
             </div>
@@ -1388,8 +1435,8 @@
             <div class="material-actions">
               <button id="scanMaterialButton" class="material-action" type="button">📷 Escanear con la cámara</button>
               <button id="attachMaterialButton" class="material-action" type="button">＋ Añadir PDF o apuntes</button>
-              <input id="scanMaterial" class="file-input" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" />
-              <input id="attachMaterial" class="file-input" type="file" accept="image/jpeg,image/png,image/webp,application/pdf,text/plain,text/markdown,text/csv,.pdf,.txt,.md,.csv" />
+              <input id="scanMaterial" class="file-input" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" aria-label="Seleccionar una imagen para escanear" />
+              <input id="attachMaterial" class="file-input" type="file" accept="image/jpeg,image/png,image/webp,application/pdf,text/plain,text/markdown,text/csv,.pdf,.txt,.md,.csv" aria-label="Seleccionar un PDF o archivo de apuntes" />
             </div>
             <div id="materialProgressWrap" class="material-progress" role="status" aria-live="polite" hidden>
               <div class="material-progress-row">
@@ -1568,6 +1615,10 @@
         <section class="panel">
           <div class="settings-list">
             <div class="settings-row">
+              <div><strong>Instalar en este móvil</strong><span>Añade Plan Rescate a la pantalla de inicio y conserva la aplicación básica disponible sin conexión.</span></div>
+              <button id="installApp" class="btn btn-secondary btn-small" type="button">Instalar</button>
+            </div>
+            <div class="settings-row">
               <div><strong>Editar configuración</strong><span>Recalcula el calendario conservando avances cuando sea posible.</span></div>
               <button id="editPlan" class="btn btn-secondary btn-small" type="button">Editar</button>
             </div>
@@ -1578,7 +1629,7 @@
             <div class="settings-row">
               <div><strong>Recuperar copia</strong><span>Importa una copia creada por Plan Rescate.</span></div>
               <button id="importPlanButton" class="btn btn-secondary btn-small" type="button">Importar</button>
-              <input id="importPlan" class="file-input" type="file" accept="application/json,.json" />
+              <input id="importPlan" class="file-input" type="file" accept="application/json,.json" aria-label="Seleccionar una copia de seguridad de Plan Rescate" />
             </div>
             <div class="settings-row">
               <div><strong>Reiniciar progreso</strong><span>Conserva la configuración y vuelve a programar desde hoy.</span></div>
@@ -1593,6 +1644,13 @@
         <p class="storage-note">No compartas la copia exportada si contiene notas que quieras mantener privadas.</p>
       </section>
     </section>
+
+    <footer class="site-footer" aria-label="Información legal y soporte">
+      <a href="./privacidad.html" target="_blank" rel="noopener">Privacidad</a>
+      <a href="./condiciones.html" target="_blank" rel="noopener">Condiciones de uso</a>
+      <a href="https://github.com/casadoa018-dotcom/plan-rescate/issues" target="_blank" rel="noopener">Informar de un problema</a>
+      <span>Beta educativa · Sin pagos ni cuentas</span>
+    </footer>
   </main>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -1602,7 +1660,7 @@
       "use strict";
 
       const STORAGE_KEY = "planRescate.v1";
-      const SECURE_AI_ENDPOINT = "";
+      const SECURE_AI_ENDPOINT = String(document.querySelector('meta[name="plan-rescate-ai-endpoint"]')?.content || "").trim();
       const LOCAL_AI_MODULE = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.2.0";
       const LOCAL_AI_MODELS = {
         compact: {
@@ -1711,6 +1769,175 @@
           definition: "El peso es la fuerza con la que la gravedad atrae a un cuerpo; se calcula con P = m × g y se mide en newtons (N).",
           example: "La misma mochila pesa menos en la Luna porque allí la gravedad es menor.",
           check: "Si cambia la gravedad y la masa no cambia, el peso sí cambia."
+        },
+        {
+          id: "french_revolution",
+          aliases: ["revolucion francesa", "causas de la revolucion francesa"],
+          definition: "La Revolución francesa comenzó en 1789 por la combinación de una grave crisis financiera del Estado, la desigualdad social y fiscal del Antiguo Régimen, las malas cosechas y el encarecimiento del pan, y la difusión de las ideas ilustradas sobre derechos y soberanía.",
+          example: "La convocatoria de los Estados Generales abrió una crisis política; poco después, la toma de la Bastilla se convirtió en un símbolo de la ruptura revolucionaria.",
+          check: "Distingue las causas de los acontecimientos: la crisis y la desigualdad ayudan a explicar el inicio; la Bastilla fue un hecho del proceso, no su única causa.",
+          direct: "Las causas principales de la Revolución francesa fueron la crisis financiera de la monarquía, la desigualdad entre estamentos, los impuestos soportados sobre todo por el Tercer Estado, el aumento del precio del pan y la influencia de la Ilustración. La crisis política de 1789 convirtió ese descontento en una revolución que terminó con el Antiguo Régimen en Francia."
+        },
+        {
+          id: "cell",
+          aliases: ["celula", "celulas"],
+          definition: "La célula es la unidad estructural y funcional básica de los seres vivos: puede realizar funciones vitales y contiene material genético.",
+          example: "Una célula animal posee membrana, citoplasma y núcleo; una bacteria no tiene un núcleo verdadero.",
+          check: "Todas las células tienen membrana, citoplasma y material genético, aunque no todas poseen los mismos orgánulos."
+        },
+        {
+          id: "dna",
+          aliases: ["adn", "acido desoxirribonucleico"],
+          definition: "El ADN es la molécula que almacena gran parte de la información genética necesaria para construir, mantener y reproducir un organismo.",
+          example: "Un gen es un segmento de ADN cuya información puede contribuir a fabricar una molécula funcional, normalmente una proteína o un ARN.",
+          check: "ADN, gen y cromosoma no son sinónimos: los genes son segmentos de ADN y los cromosomas contienen largas moléculas de ADN organizadas."
+        },
+        {
+          id: "atom",
+          aliases: ["atomo", "atomos"],
+          definition: "Un átomo es la unidad más pequeña de un elemento que conserva sus propiedades químicas; tiene un núcleo con protones y neutrones y electrones alrededor.",
+          example: "Un átomo de carbono tiene seis protones; si es neutro, también tiene seis electrones.",
+          check: "El número de protones identifica el elemento; ganar o perder electrones forma un ion, no otro elemento."
+        },
+        {
+          id: "ph",
+          aliases: ["escala de ph", "que es el ph", "ph acido", "ph basico"],
+          definition: "El pH expresa la acidez o basicidad de una disolución acuosa: por debajo de 7 suele considerarse ácida, 7 neutra y por encima de 7 básica, a temperatura ambiente.",
+          example: "Una disolución de pH 3 es más ácida que otra de pH 5.",
+          check: "La escala es logarítmica: una diferencia de una unidad representa un cambio de diez veces en la concentración relacionada con los iones hidrógeno."
+        },
+        {
+          id: "newton_second_law",
+          aliases: ["segunda ley de newton", "fuerza masa aceleracion"],
+          definition: "La segunda ley de Newton relaciona fuerza neta, masa y aceleración mediante F = m × a.",
+          example: "Si una fuerza neta de 10 N actúa sobre una masa de 2 kg, la aceleración es 5 m/s².",
+          check: "Usa la fuerza neta, no una fuerza aislada, y comprueba que N/kg equivale a m/s²."
+        },
+        {
+          id: "kinetic_energy",
+          aliases: ["energia cinetica"],
+          definition: "La energía cinética es la energía asociada al movimiento y se calcula con Ec = ½mv².",
+          example: "Si la velocidad de un objeto se duplica y su masa no cambia, su energía cinética se multiplica por cuatro.",
+          check: "La velocidad está elevada al cuadrado; por eso influye más que la masa en la fórmula."
+        },
+        {
+          id: "pythagoras",
+          aliases: ["teorema de pitagoras", "pitagoras"],
+          definition: "En un triángulo rectángulo, el teorema de Pitágoras establece que el cuadrado de la hipotenusa es igual a la suma de los cuadrados de los catetos: c² = a² + b².",
+          example: "Con catetos de 3 y 4, la hipotenusa es √(3² + 4²) = 5.",
+          check: "Solo se aplica directamente a triángulos rectángulos y la hipotenusa es siempre el lado opuesto al ángulo recto."
+        },
+        {
+          id: "subject_predicate",
+          aliases: ["sujeto y predicado", "sujeto predicado"],
+          definition: "El sujeto es la persona, animal, cosa o idea de la que se dice algo; el predicado contiene el verbo y lo que se afirma del sujeto.",
+          example: "En «Las alumnas terminaron el proyecto», «Las alumnas» es el sujeto y «terminaron el proyecto» es el predicado.",
+          check: "Haz concordar el núcleo del sujeto con el verbo: cambiar singular por plural suele ayudar a localizarlo."
+        },
+        {
+          id: "metaphor",
+          aliases: ["metafora", "metaforas"],
+          definition: "La metáfora identifica una realidad con otra por una semejanza implícita, sin usar normalmente «como».",
+          example: "«Tus ojos son dos luceros» relaciona los ojos con el brillo de los luceros.",
+          check: "Si aparece una comparación explícita con «como», suele tratarse de un símil en lugar de una metáfora pura."
+        },
+        {
+          id: "present_simple",
+          aliases: ["present simple", "presente simple en ingles"],
+          definition: "El present simple se usa en inglés para hábitos, rutinas y hechos generales; con he, she o it suele añadirse -s al verbo afirmativo.",
+          example: "I study every day; she studies every day. En preguntas se usa do/does: Does she study?",
+          check: "Después de does, el verbo vuelve a su forma base: «Does she study?», no «Does she studies?»."
+        },
+        {
+          id: "climate_weather",
+          aliases: ["clima y tiempo", "tiempo atmosferico y clima", "diferencia entre clima y tiempo"],
+          definition: "El tiempo atmosférico describe las condiciones de la atmósfera en un lugar y momento concretos; el clima resume patrones habituales durante periodos largos.",
+          example: "Que hoy llueva es tiempo atmosférico; que una región tenga inviernos lluviosos forma parte de su clima.",
+          check: "Un día frío no demuestra por sí solo un cambio del clima: hay que analizar series largas de datos."
+        },
+        {
+          id: "water_cycle",
+          aliases: ["ciclo del agua", "ciclo hidrologico"],
+          definition: "El ciclo del agua es la circulación continua del agua mediante evaporación y transpiración, condensación, precipitación, infiltración y escorrentía.",
+          example: "El agua del mar se evapora, forma nubes, precipita y puede regresar al océano por ríos o aguas subterráneas.",
+          check: "El agua cambia de lugar y de estado, pero no desaparece del sistema terrestre."
+        },
+        {
+          id: "programming_variable",
+          aliases: ["variable en programacion", "variables en programacion"],
+          definition: "Una variable es un nombre asociado a un valor que un programa puede consultar y, según el lenguaje y la declaración, modificar.",
+          example: "En JavaScript, «let puntos = 3; puntos = puntos + 1;» deja puntos con el valor 4.",
+          check: "Distingue el nombre de la variable, el operador de asignación y el valor que se almacena."
+        },
+        {
+          id: "programming_loop",
+          aliases: ["bucle en programacion", "bucles en programacion", "ciclo for"],
+          definition: "Un bucle repite un bloque de instrucciones mientras se cumpla una condición o durante un número determinado de iteraciones.",
+          example: "«for (let i = 0; i < 3; i++)» ejecuta el bloque tres veces, con i igual a 0, 1 y 2.",
+          check: "Comprueba siempre cómo cambia la condición para evitar un bucle infinito."
+        },
+        {
+          id: "series_parallel",
+          aliases: ["circuito en serie y paralelo", "serie y paralelo"],
+          definition: "En un circuito en serie los componentes comparten una sola trayectoria de corriente; en paralelo existen varias ramas conectadas a los mismos dos puntos.",
+          example: "Si una bombilla de una cadena en serie se abre, se interrumpe todo el circuito; en paralelo, las otras ramas pueden seguir funcionando.",
+          check: "En serie se conserva la corriente entre componentes; en paralelo comparten la misma diferencia de potencial entre ramas ideales."
+        },
+        {
+          id: "supply_demand",
+          aliases: ["oferta y demanda", "ley de oferta y demanda"],
+          definition: "La oferta representa cuánto desean vender los productores a distintos precios y la demanda cuánto desean comprar los consumidores; su interacción ayuda a determinar precio y cantidad de equilibrio.",
+          example: "Si aumenta la demanda y la oferta no cambia, normalmente suben el precio y la cantidad intercambiada.",
+          check: "Distingue un movimiento por cambio del precio de un desplazamiento causado por renta, costes, gustos u otros factores."
+        },
+        {
+          id: "inflation",
+          aliases: ["inflacion", "que es la inflacion"],
+          definition: "La inflación es un aumento general y sostenido del nivel de precios, lo que reduce el poder adquisitivo del dinero si los ingresos no crecen al mismo ritmo.",
+          example: "Si una cesta pasa de 100 a 103 euros en un año, su subida aproximada es del 3 %.",
+          check: "La subida de un único producto no basta para afirmar que existe inflación general."
+        },
+        {
+          id: "plato_cave",
+          aliases: ["mito de la caverna", "alegoria de la caverna"],
+          definition: "La alegoría de la caverna de Platón representa el paso desde las apariencias y opiniones hacia un conocimiento más fundamentado.",
+          example: "Los prisioneros toman sombras por la realidad; salir de la caverna simboliza una educación que obliga a revisar lo que se creía verdadero.",
+          check: "No es solo una historia sobre engaño: también trata la educación, el conocimiento y la responsabilidad de quien comprende más."
+        },
+        {
+          id: "democracy",
+          aliases: ["democracia", "sistema democratico"],
+          definition: "La democracia es un sistema político en el que la autoridad pública deriva de la ciudadanía y se ejerce mediante participación, elecciones y reglas que limitan el poder.",
+          example: "Elecciones libres son necesarias, pero también importan derechos, pluralismo, separación de poderes y rendición de cuentas.",
+          check: "Votar por sí solo no garantiza una democracia plena si no existen libertades y controles efectivos."
+        },
+        {
+          id: "human_rights",
+          aliases: ["derechos humanos"],
+          definition: "Los derechos humanos son garantías universales vinculadas a la dignidad de todas las personas, como la vida, la igualdad, la educación y la libertad de expresión.",
+          example: "El derecho a la educación exige que el acceso no dependa de discriminaciones injustas.",
+          check: "Los derechos se relacionan entre sí y su ejercicio puede estar regulado para proteger los derechos de otras personas."
+        },
+        {
+          id: "perspective",
+          aliases: ["perspectiva artistica", "perspectiva lineal", "punto de fuga"],
+          definition: "La perspectiva lineal representa profundidad haciendo que líneas paralelas del espacio parezcan converger hacia uno o varios puntos de fuga.",
+          example: "Los bordes de una carretera dibujada se acercan visualmente hacia el horizonte.",
+          check: "El punto de fuga debe ser coherente con la línea del horizonte y la posición del observador."
+        },
+        {
+          id: "musical_rhythm",
+          aliases: ["ritmo musical", "ritmo en musica"],
+          definition: "El ritmo organiza sonidos y silencios en el tiempo mediante pulsos, acentos y duraciones.",
+          example: "En un compás de 4/4 suelen agruparse cuatro pulsos, con el primero como acento principal.",
+          check: "Ritmo y tempo no son iguales: el ritmo es el patrón y el tempo indica su velocidad."
+        },
+        {
+          id: "warmup",
+          aliases: ["calentamiento deportivo", "calentamiento antes de entrenar"],
+          definition: "Un calentamiento prepara progresivamente el cuerpo y la atención para la actividad mediante movilidad, aumento suave de intensidad y gestos específicos del deporte.",
+          example: "Antes de correr: caminar, trotar suave, movilizar articulaciones y hacer varias aceleraciones controladas.",
+          check: "Debe aumentar gradualmente la intensidad sin provocar fatiga ni dolor; si aparece dolor, detén la actividad y consulta a un adulto o profesional."
         }
       ];
       const SUBJECT_INFO = {
@@ -1825,6 +2052,7 @@
       let activeOCRWorker = null;
       let speakingMessageId = null;
       let tutorSpeechSequence = 0;
+      let deferredInstallPrompt = null;
 
       function localISO(date = new Date()) {
         const copy = new Date(date);
@@ -2614,7 +2842,7 @@
           <div class="settings-row"><div><strong>Ritmo diario</strong><span>${state.plan.dailyMinutes} min al día · sesiones de ${state.plan.sessionMinutes} min</span></div><span class="mini-badge">${state.plan.breakMinutes} min descanso</span></div>
           <div class="settings-row"><div><strong>Días de estudio</strong><span>${state.plan.studyDays.slice().sort().map(day => dayNames[day]).join(", ")}</span></div><span class="mini-badge">${escapeHTML(TIME_INFO[state.plan.preferredTime] || "Flexible")}</span></div>
           <div class="settings-row"><div><strong>Temas</strong><span>${state.plan.topics.length} temas · ${state.sessions.length} sesiones en total</span></div><span class="mini-badge">${escapeHTML(formatDate(state.plan.deadline))}</span></div>
-          <div class="settings-row"><div><strong>Tutor</strong><span>${SECURE_AI_ENDPOINT ? "IA generativa mediante servidor seguro" : state.assistant?.localAIEnabled ? (LOCAL_AI_MODELS[state.assistant.localAIProfile || "compact"]?.label || "Qwen3") + " local activado · profundidad " + (TUTOR_DEPTH_INFO[state.assistant?.depth] || "Automática").toLowerCase() : "Herramientas exactas; IA local disponible para activar"} · nivel ${escapeHTML((TUTOR_LEVEL_INFO[state.assistant?.level] || "Secundaria").toLowerCase())}${state.assistant?.material ? " · material: " + escapeHTML(state.assistant.material.name) : ""}</span></div><span class="mini-badge">${state.assistant?.history?.length || 0} mensajes</span></div>
+          <div class="settings-row"><div><strong>Tutor</strong><span>${SECURE_AI_ENDPOINT ? "IA generativa mediante servidor seguro" : state.assistant?.localAIEnabled ? (LOCAL_AI_MODELS[state.assistant.localAIProfile || "compact"]?.label || "Qwen3") + " local activado · profundidad " + (TUTOR_DEPTH_INFO[state.assistant?.depth] || "Automática").toLowerCase() : "Tutor esencial activo; IA avanzada local opcional"} · nivel ${escapeHTML((TUTOR_LEVEL_INFO[state.assistant?.level] || "Secundaria").toLowerCase())}${state.assistant?.material ? " · material: " + escapeHTML(state.assistant.material.name) : ""}</span></div><span class="mini-badge">${state.assistant?.history?.length || 0} mensajes</span></div>
           ${state.plan.description ? `<div class="settings-row"><div><strong>Notas de la meta</strong><span>${escapeHTML(state.plan.description)}</span></div></div>` : ""}`;
         const snapshot = statsSnapshot();
         $("usageSummary").innerHTML = `
@@ -2670,6 +2898,39 @@
         } catch (error) {
           if (error?.name !== "AbortError") showToast("No se pudo compartir. Puedes hacerlo desde la aplicación Archivos.");
         }
+      }
+
+      function isInstalledApp() {
+        return Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches || navigator.standalone === true);
+      }
+
+      function renderInstallState() {
+        const button = $("installApp");
+        if (!button) return;
+        if (isInstalledApp()) {
+          button.textContent = "Instalada ✓";
+          button.disabled = true;
+          return;
+        }
+        button.disabled = false;
+        button.textContent = deferredInstallPrompt ? "Instalar" : "Cómo instalar";
+      }
+
+      async function installApp() {
+        if (isInstalledApp()) return showToast("Plan Rescate ya está instalada en este dispositivo.");
+        if (deferredInstallPrompt) {
+          const promptEvent = deferredInstallPrompt;
+          deferredInstallPrompt = null;
+          await promptEvent.prompt();
+          const choice = await promptEvent.userChoice;
+          renderInstallState();
+          showToast(choice?.outcome === "accepted" ? "Instalación iniciada." : "Instalación cancelada; puedes hacerlo más tarde.");
+          return;
+        }
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent || "");
+        showToast(isIOS
+          ? "En Safari, toca Compartir y después “Añadir a pantalla de inicio”."
+          : "Abre el menú del navegador y toca “Instalar aplicación” o “Añadir a pantalla de inicio”.");
       }
 
       function ensureAssistant() {
@@ -3193,9 +3454,9 @@
           return;
         }
         if (!enabled) {
-          $("tutorStatusMain").textContent = "IA local sin activar";
-          $("tutorStatusDetail").textContent = "Actívala para responder aquí";
-          $("localAIText").textContent = "Elige un perfil y activa " + model.label + " para responder preguntas abiertas, recordar la conversación y usar tus materiales dentro de la aplicación.";
+          $("tutorStatusMain").textContent = "Tutor esencial listo";
+          $("tutorStatusDetail").textContent = "IA avanzada local opcional";
+          $("localAIText").textContent = "Los cálculos, conversiones, planes y conceptos frecuentes funcionan ya. Activa " + model.label + " solo si quieres respuestas generativas más amplias, conversación y análisis avanzado de materiales.";
           enable.hidden = false;
           enable.textContent = "Activar IA local";
         } else if (localAIStatus === "ready") {
@@ -3439,8 +3700,10 @@
         if (message.role === "user") return "Tu consulta";
         if (message.source === "ai") return "Tutor conectado";
         if (message.source === "local-ai") return message.modelProfile === "quality" ? "Qwen3 1,7B local" : "Qwen3 0,6B local";
+        if (message.source === "knowledge") return "Base educativa local";
+        if (message.source === "safety") return "Respuesta de seguridad";
         if (message.verified) return "Motor exacto";
-        return "Tutor local";
+        return "Tutor esencial";
       }
 
       function tutorMessageTime(value) {
@@ -3522,7 +3785,7 @@
         }).join("") : `
           <div class="chat-empty">
             <strong>Empieza con una pregunta real.</strong><br>
-            Escribe el enunciado, haz una foto o añade un PDF. Los cálculos exactos funcionan al instante; la IA local se ocupa de las preguntas abiertas y recuerda el contexto.
+            Escribe el enunciado, haz una foto o añade un PDF. Los cálculos, planes y conceptos frecuentes funcionan al instante; la IA avanzada local es opcional para preguntas abiertas más complejas.
           </div>`;
 
         const last = history[history.length - 1];
@@ -3978,6 +4241,46 @@
         return null;
       }
 
+      function solveSimpleWordProblemLocally(question) {
+        const normalized = normalizedText(question || "").replace(/,/g, ".");
+        const price = normalized.match(/(?:cuesta|cuestan|precio(?: de)?)[^0-9]{0,20}(\d+(?:\.\d+)?)/);
+        const amount = normalized.match(/(?:compro|compras|compra|quiero|llevo|son)\s+(\d+)\b/);
+        const paid = normalized.match(/(?:pago con|entrego|de)\s+(\d+(?:\.\d+)?)\s*(?:€|euros?)?/);
+        if (price && amount && /\b(?:total|pago|cuanto|devuelven|cambio|vuelta)\b/.test(normalized)) {
+          const unitPrice = Number(price[1]);
+          const units = Number(amount[1]);
+          const total = unitPrice * units;
+          if (!Number.isFinite(total) || units <= 0) return null;
+          const payment = paid ? Number(paid[1]) : null;
+          const change = Number.isFinite(payment) ? payment - total : null;
+          return "Respuesta: el total es " + neatNumber(total) + " €." +
+            (Number.isFinite(change) ? " Si pagas con " + neatNumber(payment) + " €, deben devolverte " + neatNumber(change) + " €." : "") +
+            "\n\n1. Precio por unidad: " + neatNumber(unitPrice) + " €.\n" +
+            "2. Cantidad: " + neatNumber(units) + ".\n" +
+            "3. Multiplicación: " + neatNumber(unitPrice) + " × " + neatNumber(units) + " = " + neatNumber(total) + " €." +
+            (Number.isFinite(change) ? "\n4. Cambio: " + neatNumber(payment) + " − " + neatNumber(total) + " = " + neatNumber(change) + " €." : "") +
+            "\n\nComprobación: " + neatNumber(total) + (Number.isFinite(change) ? " + " + neatNumber(change) + " = " + neatNumber(payment) : "") + ".";
+        }
+        return null;
+      }
+
+      function localBoundaryResponse(question) {
+        const normalized = normalizedText(question || "");
+        const immediateRisk = /\b(?:quiero suicidarme|me quiero morir|quiero morir|quitarme la vida|hacerme dano|hacerme daño|no quiero vivir|voy a matarme)\b/.test(normalized);
+        if (immediateRisk) {
+          return "Tu seguridad es lo primero. Si puedes estar en peligro ahora, llama al número de emergencias de tu país (por ejemplo, 112 o 911) o pide inmediatamente a un adulto de confianza que se quede contigo.\n\nAléjate de cualquier objeto o lugar con el que pudieras hacerte daño y no te quedes a solas. Puedes enseñar este mensaje a un familiar, profesor, orientador o profesional sanitario para que te ayude ahora. Plan Rescate no puede sustituir esa ayuda urgente.";
+        }
+        const currentInformation = /\b(?:hoy|ahora mismo|actual(?:es|mente)?|ultima hora|última hora|noticia(?:s)? reciente(?:s)?|precio actual|presidente actual)\b/.test(normalized);
+        if (currentInformation && /\b(?:quien|cual|cuanto|precio|noticia|presidente|resultado|ganador|cotizacion|tiempo)\b/.test(normalized)) {
+          return "No puedo comprobar información en tiempo real desde esta versión y no voy a inventarla. Consulta una fuente oficial actualizada y fíjate en la fecha de publicación. Si pegas aquí el texto de esa fuente, puedo ayudarte a entenderlo, resumirlo o preparar preguntas para estudiarlo.";
+        }
+        const personalMedical = /\b(?:me duele|tengo sintomas|tengo síntomas|que medicamento|qué medicamento|que dosis|qué dosis|diagnostica|diagnóstico|diagnostico)\b/.test(normalized);
+        if (personalMedical) {
+          return "No puedo diagnosticar síntomas ni indicar una medicación personal. Cuéntaselo a un adulto de confianza y consulta a un profesional sanitario; si hay dificultad para respirar, pérdida de conocimiento, dolor intenso o peligro inmediato, contacta con emergencias. Sí puedo ayudarte a estudiar conceptos generales de salud sin usar datos personales.";
+        }
+        return null;
+      }
+
       function tutorStudyText(question) {
         const material = state?.assistant?.material?.text;
         if (!material) return question;
@@ -4020,7 +4323,7 @@
           "4. Haz solo el primer paso y comprueba si te acerca a la respuesta.\n" +
           "5. Revisa unidades, signos y si el resultado tiene sentido.\n\n" +
           (keywords.length ? "Palabras clave detectadas: " + keywords.join(", ") + ".\n" : "") +
-          (topics.length ? "Temas de tu plan que podrían servir de contexto: " + topics.join(", ") + "." : "Si necesitas una explicación específica, activa la IA local dentro de la aplicación.");
+          (topics.length ? "Temas de tu plan que podrían servir de contexto: " + topics.join(", ") + "." : "Si añades el enunciado o tus apuntes podré orientar el siguiente paso con más precisión.");
       }
 
       function localExplanation(question) {
@@ -4035,7 +4338,7 @@
           "• Ejemplo: crea un caso concreto donde aparezca la idea.\n" +
           "• Contraste: escribe un ejemplo parecido que NO pertenezca al concepto.\n" +
           "• Comprobación: explícaselo en voz alta a alguien imaginario.\n\n" +
-          "Este modo local organiza tu razonamiento; activa la IA local para recibir una explicación factual generada dentro de la aplicación.";
+          "Este modo esencial organiza tu razonamiento sin inventar datos; puedes añadir apuntes o activar de forma opcional la IA avanzada local para una explicación generativa.";
       }
 
       function requestedPlanMinutes(question) {
@@ -4071,7 +4374,7 @@
 
       function localDirect(question) {
         const restrictedToMaterial = Boolean(state?.assistant?.material && state.assistant.materialOnly);
-        const calculation = restrictedToMaterial ? solveFromMaterialLocally(question) : solveMathLocally(question) || solveFromMaterialLocally(question);
+        const calculation = restrictedToMaterial ? solveFromMaterialLocally(question) : solveMathLocally(question) || solveSimpleWordProblemLocally(question) || solveFromMaterialLocally(question);
         if (calculation) return calculation;
         const conversion = restrictedToMaterial ? null : convertUnitsLocally(question);
         if (conversion) return conversion;
@@ -4106,18 +4409,22 @@
           civics: "Indica la pregunta o texto y separa hechos, valores y opiniones.",
           general: "Pega el enunciado completo o tus apuntes relevantes."
         };
-        return "Esta pregunta necesita interpretar conocimientos de " + subjectLabel + ". Para responderla directamente dentro de la aplicación, activa la tarjeta “IA local dentro de la app”.\n\n" +
-          "Antes de preguntar: " + (tips[subject] || tips.general) +
+        return "Respuesta inicial segura:\nNo tengo una respuesta factual verificada para esta consulta de " + subjectLabel + " y no voy a inventarla.\n\n" +
+          "Para avanzar ahora:\n1. " + (tips[subject] || tips.general) + "\n" +
+          "2. Pega una definición, párrafo o dato de tus apuntes y podré explicarlo, resumirlo o convertirlo en un quiz.\n" +
+          "3. Si quieres una respuesta generativa más amplia, puedes activar la IA avanzada local de forma opcional.\n" +
           (keywords.length ? "\nConceptos detectados: " + keywords.join(", ") + "." : "");
       }
 
       function localTutorResponse(question, mode) {
+        const boundary = localBoundaryResponse(question);
+        if (boundary) return boundary;
         const studyText = tutorStudyText(question);
         const citeMaterial = answer => state.assistant.material ? answer + "\n\nFuente de estudio: material adjunto [M1]." : answer;
         if (mode === "direct") return localDirect(question);
         if (mode === "solve") {
-          const solution = solveMathLocally(question) || convertUnitsLocally(question) || solveFromMaterialLocally(question);
-          return solution || "Este problema necesita que la IA interprete el enunciado. Activa el motor de IA privado y vuelve a tocar “Resolver problema”.\n\n" + localGuide(question);
+          const solution = solveMathLocally(question) || solveSimpleWordProblemLocally(question) || convertUnitsLocally(question) || solveFromMaterialLocally(question);
+          return solution || "No puedo interpretar todos los datos con suficiente seguridad y no voy a inventar el resultado.\n\n" + localGuide(question) + "\n\nPuedes pegar el enunciado completo o activar la IA avanzada local de forma opcional.";
         }
         if (mode === "summary") return citeMaterial(localSummary(studyText));
         if (mode === "quiz") return citeMaterial(localQuiz(studyText));
@@ -4347,14 +4654,22 @@
         let verified = false;
         let pendingMessage = null;
         try {
-          const instant = ["direct", "solve"].includes(mode)
+          const boundary = localBoundaryResponse(question);
+          const exact = ["direct", "solve"].includes(mode)
             ? materialSnapshot?.only
               ? solveFromMaterialLocally(question)
-              : solveMathLocally(question) || convertUnitsLocally(question) || solveFromMaterialLocally(question)
+              : solveMathLocally(question) || solveSimpleWordProblemLocally(question) || convertUnitsLocally(question) || solveFromMaterialLocally(question)
             : null;
-          if (instant) {
-            answer = instant;
+          const knowledge = mode === "direct" ? localKnowledgeDirect(question) : null;
+          if (boundary) {
+            answer = boundary;
+            source = "safety";
+          } else if (exact) {
+            answer = exact;
             verified = true;
+          } else if (knowledge) {
+            answer = knowledge;
+            source = "knowledge";
           } else if (SECURE_AI_ENDPOINT) {
             const response = await fetch(SECURE_AI_ENDPOINT, {
               method: "POST",
@@ -5028,6 +5343,7 @@
       $("editPlan").addEventListener("click", () => showSetup(true));
       $("proInterest").addEventListener("click", markProInterest);
       $("shareBeta").addEventListener("click", shareBetaVersion);
+      $("installApp").addEventListener("click", installApp);
       $("exportPlan").addEventListener("click", exportPlan);
       $("importPlanButton").addEventListener("click", () => $("importPlan").click());
       $("importPlan").addEventListener("change", event => importPlan(event.target.files[0]));
@@ -5038,9 +5354,28 @@
       });
       window.addEventListener("online", renderLocalAIState);
       window.addEventListener("offline", renderLocalAIState);
+      window.addEventListener("beforeinstallprompt", event => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        renderInstallState();
+      });
+      window.addEventListener("appinstalled", () => {
+        deferredInstallPrompt = null;
+        renderInstallState();
+        showToast("Plan Rescate se ha instalado correctamente.");
+      });
+
+      if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./sw.js").catch(() => {
+            // La aplicación sigue funcionando aunque el navegador no permita el modo sin conexión.
+          });
+        });
+      }
 
       setInitialDeadline();
       renderDraftTopics();
+      renderInstallState();
       if (state) {
         saveState();
         showPlan();
